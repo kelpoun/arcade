@@ -6,7 +6,7 @@ LIBS = -lGL -lglut
 
 TARGET = arcade
 
-$(TARGET): src/arcade.cpp
+$(TARGET): src/game.cpp src/main.cpp
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(TARGET) $^ $(LIBS)
 
 clean:
