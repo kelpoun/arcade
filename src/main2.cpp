@@ -5,6 +5,9 @@
 #include <iostream>
 #include "game2.h"
 
+int someindex = 1; // for npc
+int somej = 1;
+
 extern bool upArrow;
 extern bool downArrow;
 extern bool rightArrow;
@@ -37,9 +40,18 @@ int main(int argc, char** argv) {
     return 0;
 }
 
+
 void display_callback() {
     glClear(GL_COLOR_BUFFER_BIT);
     drawPlayer();
+
+    glRectd(someindex, somej + 5, someindex + 1, somej + 6); // for npc
+    if (someindex > 37) {
+        someindex = 1;
+        somej++;
+    }
+    someindex++;
+
     // add moveable player, NPCs, background, etc.
     glutSwapBuffers();
 }
