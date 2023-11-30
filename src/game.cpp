@@ -12,6 +12,8 @@ extern bool gameOver;
 int posX[60] = {20, 20, 20, 20, 20}, posY[60] = {20, 19, 18, 17, 16}; // we are using square grid, so we don't need floating points; array that can hold 60 positions (max length of snake)
 extern int score;
 
+bool right = true; //direction for npc
+
 void initGrid(int x, int y) {
     gridX = x;
     gridY = y;
@@ -30,18 +32,18 @@ void unit(int x, int y) { // draw one unit
     if (x == 0 || y == 0 || x == gridX - 1 || y == gridY - 1) { // outer boundaries
         glLineWidth(3.0);
         glColor3f(1.0, 0.0, 0.0);
+        glRectd(x,y, x+1, y+1);
     }
     else {
-        glLineWidth(1.0); // optional (because default already 1.0), width of line
+        /* glLineWidth(1.0); // optional (because default already 1.0), width of line
         glColor3f(1.0, 1.0, 1.0); // optional (because default already white), color of line
+        glBegin(GL_LINE_LOOP); // GL_LINE_LOOP is geometric primitive, loop means shape is closed
+        glVertex2f(x, y); // draws line to vertex
+        glVertex2f(x + 1, y); // draws line to vertex
+        glVertex2f(x + 1, y + 1); // draws line to vertex
+        glVertex2f(x, y + 1); // draws line to vertex
+        glEnd (); */// end drawing stuff
     }
-
-    glBegin(GL_LINE_LOOP); // GL_LINE_LOOP is geometric primitive, loop means shape is closed
-    glVertex2f(x, y); // draws line to vertex
-    glVertex2f(x + 1, y); // draws line to vertex
-    glVertex2f(x + 1, y + 1); // draws line to vertex
-    glVertex2f(x, y + 1); // draws line to vertex
-    glEnd(); // end drawing stuff
 }
 
 void drawFood() {
@@ -49,9 +51,66 @@ void drawFood() {
         random(foodX, foodY); // if food is true, randomize food position
     }
     food = false; // reset food
-    glColor3f(1.0, 0.0, 0.0);
+    glColor3f(1.0, 1.0, 0.0);
     glRectf(foodX, foodY, foodX + 1, foodY + 1); // draw food
 }
+
+
+int i = 1;
+int npcX1 = i;
+int npcX2 = i;
+int npcX3 = i; 
+void drawNPC( int j) {
+    glColor3f(1.0, 0.0, 0.0);
+    glRectd(i, j, i+1, j+1);
+    if (i > 37) {
+        right = false;
+    }
+    if (right) {
+    i++;
+    npcX1++;
+    npcX2++;
+    npcX3++;
+    }
+
+    else {
+        i--;
+        npcX1--;
+        npcX2--;
+        npcX3--;
+        if (i < 2) {
+            right = true;
+        }
+    }
+}
+
+bool up = true;
+
+int j = 1;
+void drawNPC2 (int i ) {
+    glColor3f(1.0, 0.0, 0.0);
+    glRectd(i, j, i+1, j+1);
+    if (j > 37) {
+        up = false;
+    }
+    if (up) {
+    j++;
+    npcX1++;
+    npcX2++;
+    npcX3++;
+    }
+
+    else {
+        j--;
+        npcX1--;
+        npcX2--;
+        npcX3--;
+        if (j < 2) {
+            up = true;
+        }
+    }
+}
+
 
 void drawSnake() {
     for (int i = snake_length - 1; i > 0; i--) { // previous snake block switched; note head a index 0
@@ -93,7 +152,6 @@ void drawSnake() {
     }
     if (posX[0] == foodX && posY[0] == foodY) { // if head reaches food
         score++;
-        snake_length++;
         if (snake_length > 60) { // prevents snake from growing greater than 60
             snake_length = 60;
         }
@@ -101,6 +159,8 @@ void drawSnake() {
         food = true;
     }
 }
+
+
 
 void random (int &x, int &y) {
     int _maxX = gridX - 2; // max value is 38

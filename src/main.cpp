@@ -16,7 +16,7 @@ void reshape_callback(int, int);
 void keyboard_callback(int, int, int); // first param = ASCI value of key pressed, other params is position of mouse
 
 void init (){
-    glClearColor(0.0, 0.0, 0.0, 1.0); // sets the color of the window, first 3 params are RGB, last param is alpha (keep at 1.0)
+    glClearColor(0.0, 0.0, 0.0, 0.5); // sets the color of the window, first 3 params are RGB, last param is alpha (keep at 1.0)
     initGrid(40, 40); // function we defined in game.cpp
 }
 
@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE ); // uses RGB and double buffer
     // glutInitWindowPosition(); // optional, sets position on screen, random if not set
     glutInitWindowSize(500, 500); // makes window size 500x500 pixels
-    glutCreateWindow("OpenGL 4.3 with Mesa and FreeGLUT"); // creates window with parameter as name
+    glutCreateWindow("Legless Reptile"); // creates window with parameter as name
     glutDisplayFunc(display_callback); // displays
     glutReshapeFunc(reshape_callback); // called when window initilaized, and everytime window resized
     glutTimerFunc(0, timer_callback, 0); // called starts at 0 ms (first param)
@@ -40,6 +40,10 @@ void display_callback() {
     drawGrid(); // defined in game.cpp
     drawSnake();
     drawFood();
+    drawNPC(5);
+    drawNPC(30);
+    drawNPC(25);
+    drawNPC2(4);
     glutSwapBuffers(); // swap buffer being drawn with buffer being displayed 
     if (gameOver) {
         char _score[10]; // array of score (will prob not exceed 10 chars)
