@@ -57,9 +57,7 @@ void drawFood() {
 
 
 int i = 1;
-int npcX1 = i;
-int npcX2 = i;
-int npcX3 = i; 
+int npcX1 = i; 
 void drawNPC( int j) {
     glColor3f(1.0, 0.0, 0.0);
     glRectd(i, j, i+1, j+1);
@@ -69,25 +67,44 @@ void drawNPC( int j) {
     if (right) {
     i++;
     npcX1++;
-    npcX2++;
-    npcX3++;
     }
 
     else {
         i--;
         npcX1--;
-        npcX2--;
-        npcX3--;
         if (i < 2) {
             right = true;
         }
     }
 }
 
+int m = 1;
+int npcX2 = 1;
+ void drawNPC2( int j) {
+    glColor3f(1.0, 0.0, 0.0);
+    glRectd(m, j, m+1, j+1);
+    if (m > 37) {
+        right = false;
+    }
+    if (right) {
+    m++;
+    npcX2++;
+    }
+
+    else {
+        m--;
+        npcX2--;
+        if (m < 2) {
+            right = true;
+        }
+    }
+} 
+
 bool up = true;
 
 int j = 1;
-void drawNPC2 (int i ) {
+int npcY = j; 
+void drawNPC3 (int i ) {
     glColor3f(1.0, 0.0, 0.0);
     glRectd(i, j, i+1, j+1);
     if (j > 37) {
@@ -95,16 +112,12 @@ void drawNPC2 (int i ) {
     }
     if (up) {
     j++;
-    npcX1++;
-    npcX2++;
-    npcX3++;
+    npcY++;
     }
 
     else {
         j--;
-        npcX1--;
-        npcX2--;
-        npcX3--;
+        npcY--;i =1;
         if (j < 2) {
             up = true;
         }
@@ -141,9 +154,21 @@ void drawSnake() {
     glColor3f(0.0, 1.0, 0.0);
 
     for(int i = 1;i < snake_length; i++) { // ends game if head hits part of snake
-        if(posX[i] == posX[0] && posY[i] == posY[0]) {
+        /* if(posX[i] == posX[0] && posY[i] == posY[0]) {
             gameOver=true;
-        }    
+        }  */   
+
+        if(posX[i] == npcX1 && posY[i] == 5 ) {
+            gameOver =true;
+        }
+
+        else if(posX[i] == npcX2 && posY[i] == 25 ) {
+            gameOver =true;
+        } 
+
+        else if(posX[i] == 4 && posY[i] == npcY ) {
+            gameOver =true;
+        }
     }
     
     
@@ -155,6 +180,7 @@ void drawSnake() {
         if (snake_length > 60) { // prevents snake from growing greater than 60
             snake_length = 60;
         }
+        // size++
 
         food = true;
     }

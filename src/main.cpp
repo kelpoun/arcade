@@ -41,9 +41,8 @@ void display_callback() {
     drawSnake();
     drawFood();
     drawNPC(5);
-    drawNPC(30);
-    drawNPC(25);
-    drawNPC2(4);
+    drawNPC2(25);
+    drawNPC3(4);
     glutSwapBuffers(); // swap buffer being drawn with buffer being displayed 
     if (gameOver) {
         char _score[10]; // array of score (will prob not exceed 10 chars)
