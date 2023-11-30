@@ -29,9 +29,9 @@ int main(int argc, char** argv) {
     glutDisplayFunc(display_callback); // displays
     glutReshapeFunc(reshape_callback); // called when window initilaized, and everytime window resized
     glutTimerFunc(0, timer_callback, 0); // called starts at 0 ms (first param)
-    glutSpecialFunc(keyboard_callback);
+    glutSpecialFunc(keyboard_callback); // calls anytime a special key is pressed (arrows)
     init();
-    glutMainLoop();
+    glutMainLoop(); // detects 
     return 0;
 }
 
