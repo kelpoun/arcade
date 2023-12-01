@@ -1,13 +1,13 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef DRAW_H
+#define DRAW_H
 
 void initGrid(int, int);
-void drawGrid();
-void drawSnake();
+void drawBoundary();
+void random(int&, int&);
 void drawFood();
 void drawNPC(int);
 void drawNPC2(int);
 void drawNPC3(int);
-void random(int&, int&);
+void drawSnake();
 
 #endif

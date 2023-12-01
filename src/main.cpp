@@ -2,69 +2,68 @@
 
 #include <GL/glut.h>
 #include <GL/freeglut.h>
-#include "game.h"
+#include "draw.h"
 #include <stdlib.h>
 
+// extern global vars
 extern int sDirection;
-bool gameOver = false;
-int score = 0;
+extern int score;
+extern bool gameOver;
 
 // forward declarations
+void init();
+void display_callback();
+void reshape_callback(int, int); 
 void timer_callback(int);
-void display_callback(); 
-void reshape_callback(int, int);
-void keyboard_callback(int, int, int); // first param = ASCI value of key pressed, other params is position of mouse
-
-void init (){
-    glClearColor(0.0, 0.0, 0.0, 0.5); // sets the color of the window, first 3 params are RGB, last param is alpha (keep at 1.0)
-    initGrid(40, 40); // function we defined in game.cpp
-}
+void keyboard_callback(int key, int, int);
 
 int main(int argc, char** argv) {
-    glutInit(&argc, argv); // initializes glut, needed to use all glut functions
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE ); // uses RGB and double buffer
-    // glutInitWindowPosition(); // optional, sets position on screen, random if not set
-    glutInitWindowSize(500, 500); // makes window size 500x500 pixels
-    glutCreateWindow("Legless Reptile"); // creates window with parameter as name
-    glutDisplayFunc(display_callback); // displays
-    glutReshapeFunc(reshape_callback); // called when window initilaized, and everytime window resized
-    glutTimerFunc(0, timer_callback, 0); // called starts at 0 ms (first param)
-    glutSpecialFunc(keyboard_callback); // calls anytime a special key is pressed (arrows)
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE );
+    glutInitWindowSize(500, 500);
+    glutCreateWindow("Legless Reptile");
+    glutDisplayFunc(display_callback);
+    glutReshapeFunc(reshape_callback);
+    glutTimerFunc(0, timer_callback, 0);
+    glutSpecialFunc(keyboard_callback);
     init();
-    glutMainLoop(); // detects 
+    glutMainLoop();
     return 0;
+}
+
+void init() {
+    glClearColor(0.0, 0.0, 0.0, 0.5);
+    initGrid(40, 40); // defined in game.cpp; initializes grid to be 40x40
 }
 
 void display_callback() {
     glClear(GL_COLOR_BUFFER_BIT); // color buffer will be cleared to value specified by glClearColor
-    drawGrid(); // defined in game.cpp
+
+    // draw functions defined in game.cpp
+    drawBoundary();
     drawSnake();
     drawFood();
     drawNPC(5);
     drawNPC2(25);
     drawNPC3(4);
-    glutSwapBuffers(); // swap buffer being drawn with buffer being displayed 
+
+    glutSwapBuffers();
     if (gameOver) {
-        char _score[10]; // array of score (will prob not exceed 10 chars)
-        // itoa(score, _score, 10); // integer value to characters in #include <stdlib.h>; IDK what last param is; doesn't work?
-        // char text[50] = "Your score: "; // doesn't work?
-        // strcat (text, _score); // doesn't work?
-        // MessageBox(NULL, "Your Score : ",  "GAME OVER", 0); // only for windows, doesn't work? 
         exit(0);
     }
 }
 
 void reshape_callback(int w, int h) {
-    glViewport(0, 0, (GLsizei)w, (GLsizei)h); // sets viewport of window; casts w and h as GLsizei
-    glMatrixMode(GL_PROJECTION); // switch to projection mode
-    glLoadIdentity(); // reset to identity matrix, specificlaly in projection matrix mode
-    glOrtho(0.0, 40.0, 0.0, 40.0, -1.0, 1.0); // look at params, setting coordinate system
-    glMatrixMode(GL_MODELVIEW); // go back to model view matrix
+    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0.0, 40.0, 0.0, 40.0, -1.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
 }
 
 void timer_callback(int) {
-    glutPostRedisplay(); // urges program to redisplay
-    glutTimerFunc(1000/10, timer_callback, 0); // calls every 1000/10 times per second
+    glutPostRedisplay();
+    glutTimerFunc(1000/10, timer_callback, 0); // FPS set to 10
 }
 
 void keyboard_callback(int key, int, int) {
