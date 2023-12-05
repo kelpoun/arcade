@@ -1,5 +1,6 @@
 #define GL_SILENCE_DEPRECATION
 
+#include <iostream>
 #include <GL/glut.h>
 #include <GL/freeglut.h>
 #include "draw.h"
@@ -16,6 +17,7 @@ void display_callback();
 void reshape_callback(int, int); 
 void timer_callback(int);
 void keyboard_callback(int key, int, int);
+void keyboard_callback2(unsigned char key, int, int);
 
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
@@ -26,6 +28,7 @@ int main(int argc, char** argv) {
     glutReshapeFunc(reshape_callback);
     glutTimerFunc(0, timer_callback, 0);
     glutSpecialFunc(keyboard_callback);
+    glutKeyboardFunc(keyboard_callback2);
     init();
     glutMainLoop();
     return 0;
@@ -39,25 +42,28 @@ void init() {
 void display_callback() {
     glClear(GL_COLOR_BUFFER_BIT); // color buffer will be cleared to value specified by glClearColor
 
-    // draw functions defined in game.cpp
-    drawBoundary();
-    drawSnake();
-    drawFood();
-    drawNPC(5);
-    drawNPC2(25);
-    drawNPC3(4);
+    if (!gameOver) {
+        // draw functions defined in game.cpp
+        drawBoundary();
+        drawSnake();
+        drawFood();
+        drawNPC(5);
+        drawNPC2(25);
+        drawNPC3(4);
+        drawScore();
+    }
+    else if (gameOver) {
+        drawGameOver();
+    }
 
     glutSwapBuffers();
-    if (gameOver) {
-        exit(0);
-    }
 }
 
 void reshape_callback(int w, int h) {
     glViewport(0, 0, (GLsizei)w, (GLsizei)h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0.0, 40.0, 0.0, 40.0, -1.0, 1.0);
+    glOrtho(0.0, 40.0, 0.0, 42.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -87,6 +93,21 @@ void keyboard_callback(int key, int, int) {
             if (sDirection != 2){
                 sDirection = -2;
             } 
+            break;
+    }
+}
+
+void keyboard_callback2(unsigned char key, int, int) { 
+    switch(key) {
+        case 27:
+            if (gameOver) {
+                exit(0);
+            }
+            break;
+        case 13: 
+            if (gameOver) {
+                reset();
+            }
             break;
     }
 }

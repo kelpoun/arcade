@@ -8,6 +8,9 @@ void drawFood();
 void drawNPC(int);
 void drawNPC2(int);
 void drawNPC3(int);
+void drawScore();
 void drawSnake();
+void drawGameOver();
+void reset();
 
 #endif

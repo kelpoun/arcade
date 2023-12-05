@@ -1,7 +1,10 @@
+#include <iostream>
 #include <GL/gl.h>
 #include <GL/freeglut.h>
 #include "draw.h"
 #include <ctime>
+#include <stdio.h>
+#include <string.h>
 
 // extern global vars
 int sDirection = 2; // snake direction: 1 = up, -1 = down, 2 = right, -2 = left
@@ -24,25 +27,26 @@ bool right1 = true; // direction for npc1
 bool right2 = true; // direction for npc2
 bool up = true; // direction for npc3
 
+// game over logic
+bool displayGameOver = true;
+
 void initGrid(int x, int y) {
     gridX = x;
     gridY = y;
 }
 
 void unit(int x, int y) { // draw one unit
-    if (x == 0 || y == 0 || x == gridX - 1 || y == gridY - 1) { // outer boundaries
-        glLineWidth(3.0);
-        glColor3f(1.0, 0.0, 0.0);
-        glRectd(x, y, x + 1, y + 1);
-    }
+    glLineWidth(3.0);
+    glColor3f(1.0, 0.0, 0.0);
+    glRectd(x, y, x + 1, y + 1);
 }
 
 void drawBoundary() {
     for (int x = 0; x < gridX; x++) {
         unit(x, 0);
-        unit(x, gridY - 1);
+        unit(x, gridY - 2);
     }
-    for (int y = 1; y < gridY - 1; y++) {
+    for (int y = 1; y < gridY - 2; y++) {
         unit(0, y);
         unit(gridX - 1, y);
     }
@@ -150,7 +154,7 @@ void drawSnake() {
     }
     glColor3f(0.0, 1.0, 0.0);
 
-    for(int i = 1;i < snake_length; i++) { // ends game if head hits npc
+    for(int i = 1; i < snake_length; i++) { // ends game if head hits npc
         if(posX[i] == npc1_X && posY[i] == 5 ) {
             gameOver =true;
         }
@@ -164,11 +168,48 @@ void drawSnake() {
         }
     }
     
-    if (posX[0] == 0 || posX[0] == gridX - 1 || posY[0] == 0 || posY[0] == gridY - 1) { // check if snake has been in red area
+    if (posX[0] == 0 || posX[0] == gridX - 1 || posY[0] == 0 || posY[0] == gridY - 2) { // check if snake has been in red area
         gameOver = true;
     }
     if (posX[0] == foodX && posY[0] == foodY) { // if head reaches food
         score++;
         food = true;
     }
+}
+
+void drawScore() {
+    char scoreStr[15]; // max chars is 15
+    snprintf(scoreStr, sizeof(scoreStr), "SCORE: %d", score);
+    glColor3f(0, 1.0, 0);
+    glRasterPos2f(0, 40);
+    
+    glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)scoreStr);
+}
+void drawGameOver();
+
+void drawGameOver() {
+    glColor3f(1.0, 0, 0);
+    glRasterPos2f(16, 20);
+    glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)"GAME OVER");
+}
+
+void reset() {
+    sDirection = 2; // snake direction: 1 = up, -1 = down, 2 = right, -2 = left
+    score = 0;
+    gameOver = 0;
+    snake_length = 5;
+    posX[0] = 20;
+    posX[1] = 20;
+    posX[2] = 20;
+    posX[3] = 20;
+    posX[4] = 20;
+    posY[0] = 20;
+    posY[1] = 19;
+    posY[2] = 18;
+    posY[3] = 17;
+    posY[4] = 16;
+    food = true;
+    right1 = true; // direction for npc1
+    right2 = true; // direction for npc2
+    up = true; // direction for npc3
 }
