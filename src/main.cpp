@@ -50,6 +50,8 @@ void display_callback() {
         drawNPC(5);
         drawNPC2(25);
         drawNPC3(4);
+        //drawNPC4();
+    
         drawScore();
     }
     else if (gameOver) {

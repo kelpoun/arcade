@@ -4,10 +4,12 @@
 void initGrid(int, int);
 void drawBoundary();
 void random(int&, int&);
+void randomDirection();
 void drawFood();
 void drawNPC(int);
 void drawNPC2(int);
 void drawNPC3(int);
+void drawNPC4();
 void drawScore();
 void drawSnake();
 void drawGameOver();
