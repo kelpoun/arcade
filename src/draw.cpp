@@ -346,7 +346,7 @@ void drawGameOver() {
 }
 
 void reset() {
-    snakeDirection = 2; // snake direction: 1 = up, -1 = down, 2 = right, -2 = left
+    snakeDirection = 2;
     score = 0;
     gameOver = 0;
     snakeLength = 5;
@@ -361,7 +361,7 @@ void reset() {
     posY[3] = 17;
     posY[4] = 16;
     food = true;
-    right1 = true; // direction for npc1
-    right2 = true; // direction for npc2
-    up = true; // direction for npc3
+    right1 = true;
+    right2 = true;
+    up = true;
 }
