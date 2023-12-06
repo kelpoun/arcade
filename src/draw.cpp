@@ -37,8 +37,8 @@ bool up = true; // direction for npc3
 // text display logic
 int startFlash = 0;
 int endFlash = 0;
-std::vector<int> scores;
-std::vector<int> highestScores;
+std::vector<int> scores; // all scores
+std::vector<int> highestScores; // top 5 scores
 
 void initGrid(int x, int y) {
     gridX = x;
