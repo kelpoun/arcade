@@ -248,6 +248,10 @@ void drawGameStart() {
     glRasterPos2f(13, 25);
     glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)"LEGLESS REPTILE");
 
+    glColor3f(0.0, 1.0, 0);
+    glRasterPos2f(12.5, 16);
+    glutBitmapString(GLUT_BITMAP_HELVETICA_12, (const unsigned char*)"USE ARROW KEYS TO MOVE!");
+
     // displays "PRESS 'ENTER' TO START"
     glColor3f(0.0, 1.0, 0);
     glRasterPos2f(13.5, 15);
@@ -305,7 +309,7 @@ void drawGameOver() {
     bool youDisplayed = false;
     char firstPlace[15]; // max chars is 15
     if (highestScores.at(0) == score) {
-        snprintf(firstPlace, sizeof(firstPlace), "1ST: %d (you)", highestScores.at(0));
+        snprintf(firstPlace, sizeof(firstPlace), "1ST: %d (YOU)", highestScores.at(0));
         youDisplayed = true;
     }
     else {
@@ -318,7 +322,7 @@ void drawGameOver() {
     // displays 2nd place
     char secondPlace[15]; // max chars is 15
     if (highestScores.at(1) == score && !youDisplayed) {
-        snprintf(secondPlace, sizeof(secondPlace), "2ND: %d (you)", highestScores.at(1));
+        snprintf(secondPlace, sizeof(secondPlace), "2ND: %d (YOU)", highestScores.at(1));
         youDisplayed = true;
     }
     else {
@@ -331,7 +335,7 @@ void drawGameOver() {
     // displays 3rd place
     char thirdPlace[15]; // max chars is 15
     if (highestScores.at(2) == score && !youDisplayed) {
-        snprintf(thirdPlace, sizeof(thirdPlace), "3RD: %d (you)", highestScores.at(2));
+        snprintf(thirdPlace, sizeof(thirdPlace), "3RD: %d (YOU)", highestScores.at(2));
     }
     else {
         snprintf(thirdPlace, sizeof(thirdPlace), "3RD: %d", highestScores.at(2));
