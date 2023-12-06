@@ -288,7 +288,7 @@ void drawGameOver() {
     char scoreStr[15]; // max chars is 15
     snprintf(scoreStr, sizeof(scoreStr), "YOUR SCORE: %d", score);
     glColor3f(0, 1.0, 0);
-    glRasterPos2f(15, 28);
+    glRasterPos2f(14.5, 28);
     glutBitmapString(GLUT_BITMAP_HELVETICA_12, (const unsigned char*)scoreStr);
 
     // displays "PRESS 'ENTER' TO PLAY AGAIN"
