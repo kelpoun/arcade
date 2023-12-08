@@ -30,12 +30,14 @@ int foodX, foodY;
 bool right1 = true; // direction for npc1
 bool right2 = true; // direction for npc2
 bool up = true; // direction for npc3
-bool upDown = true; // direction for npc4
+bool upDown = true; // direction for npc3
+bool upDown2 = true; // direction for npc2
 int count = 8;
+int count2 = 10;
 
 // npc snakes logic
 int npc4_length =  1;
-int npcDirection = -1;
+int npc3Direction = -1;
 int npc2_length = 1;
 int npc2Direction = 1;
 
@@ -96,13 +98,13 @@ void randomDirection() {
     int randomIndex = distribution(rng);
 
     if (upDown) {
-        npcDirection = xdirections[randomIndex]; 
+        npc3Direction = xdirections[randomIndex]; 
 
         upDown = false;
     }
 
     else {
-        npcDirection = ydirections[randomIndex]; 
+        npc3Direction = ydirections[randomIndex]; 
         upDown = true;
     }
 
@@ -113,21 +115,21 @@ void randomDirection() {
 void randomDirection2() {
     std::mt19937 rng(static_cast<unsigned>(std::time(0)));
 
-    int ydirections[] = {-1,1};
-    int xdirections[] = {-2,2};
+    int y2directions[] = {-1,1};
+    int x2directions[] = {-2,2};
 
-    std::uniform_int_distribution<int> distribution(0,1);
-    int randomIndex = distribution(rng);
+    std::uniform_int_distribution<int> distribution2(0,1);
+    int randomIndex = distribution2(rng);
 
-    if (upDown) {
-        npc2Direction = xdirections[randomIndex]; 
+    if (upDown2) {
+        npc2Direction = x2directions[randomIndex]; 
 
-        upDown = false;
+        upDown2 = false;
     }
 
     else {
-        npc2Direction = ydirections[randomIndex]; 
-        upDown = true;
+        npc2Direction = y2directions[randomIndex]; 
+        upDown2 = true;
     }
 
     
@@ -135,11 +137,11 @@ void randomDirection2() {
 }
 
 
-int npc1_X = 5; // x start position of npc1
+
 int npc1_Y = 3;
-bool up1 = false;
+int npc1_X = 5;
 void drawNPC(int npc1_Y) {
-    if (score <= 2) {
+    if (score <= 5) {
         glColor3f(1.0, 0.0, 0.0);
         glRectd(npc1_X, npc1_Y, npc1_X + 1, npc1_Y + 1 );
         if (npc1_X < 2) {
@@ -154,52 +156,17 @@ void drawNPC(int npc1_Y) {
         else {
             npc1_X--;  
         }
-    }
-    else if (score == 3) {
-        npc1_X = 3;
-        npc1_X = 5;
-    }
-    else if (score > 4) {
-        glColor3f(1.0, 0.0, 0.0);
-        glRectd(npc1_X, npc1_Y, npc1_X + 1, npc1_Y + 1 );
-        if (npc1_X < 2) {
-            right1 = true;
-            up1 = false;
-        }
-        if (npc1_X > 36) {
-            right1 = false;
-            up1 = true;
 
-
-        }
-        if (npc1_Y < 2) {
-            up1 = true;
-            right1= true;
-        }
-
-        if (npc1_Y > 36) {
-            up1 = false;
-            right1 = false;
-        }
-
-        if (right1 && !up1) {
-            npc1_X++;
-        }
-        else if (!right1 && up1) {
-            npc1_Y++;
-        }
-        else if (!right1 && !up1) {
-            npc1_X--;  
-        }
-        else {
-            npc1_Y--;
+        if (score == 5) {
+            npc1_X = 0;
         }
     }
 }
+
 int npc2_X = 1; // x start position of npc2
 int lastY2;
 int n2posX[30] = {0};  
-int n2posY[30] = {lastY2};
+int n2posY[30] = {20};
 void drawNPC2(int npc2_Y) {
     if (score <= 5) {
         glColor3f(1.0, 0.0, 0.0);
@@ -216,24 +183,32 @@ void drawNPC2(int npc2_Y) {
         else {
             npc2_X--;
         }
+
+        if (score == 5) {
+            npc2_X = 0;
+        }
     }
 
     else if(score > 8) {
         
-        if (score == 6) {
-            n2posY[0] == lastY2;
-            n2posX[0] == 0;
-        }
+        // if (score == 6) {
+        //     n2posY[0] == lastY2;
+        //     n2posX[0] == 0;
+        // }
 
-        if (count == 0) {
+        if (count2 == 0 && count != 0) {
             randomDirection2();
-            //npc2Direction = npcDirection;
-            count = 10;
+            //npc2Direction = npc3Direction;
+            count2 = 10;
         }
 
-        if (n2posX[0] < 3) {
+        else if (count2 == 0) {
+            count2 = 1;
+        }
+
+        if (n2posX[0] < 16) {
             if (!upDown) {
-                if (n2posY[0] < 16) {
+                if (n2posY[0] < 20) {
                     npc2Direction = 1;
                 }
                 else {
@@ -320,13 +295,15 @@ void drawNPC2(int npc2_Y) {
         }
         glColor3f(0.0, 1.0, 0.0);
 
-        for(int n2 = 1; n2 < npc2_length; n2++) { // ends game if snake hits npc
-            if(n2posX[n2] == posX[0] && n2posY[n2] == posY[0] ) {
-                gameOver =true;
+        for(int n2 = 0; n2 < npc2_length; n2++) { // ends game if snake hits npc
+            for (int u2 = 0; u2 < 5; u2++) {
+                if(n2posX[n2] == posX[u2] && n2posY[n2] == posY[u2] ) {
+                    gameOver =true;
+                }
             }
         }
 
-        count --;
+        count2 --;
     }
       else {
         lastY2 = npc2_Y;
@@ -334,8 +311,8 @@ void drawNPC2(int npc2_Y) {
 }
 
 int lastY3;
-int nposX[30] = {4};  
-int nposY[30] = {lastY3};
+int n3posX[30] = {4};  
+int n3posY[30] = {lastY3};
 int npc3_Y = 1; // y start position of npc3
 
 void drawNPC3(int npc3_X) {
@@ -354,112 +331,119 @@ void drawNPC3(int npc3_X) {
         else {
             npc3_Y--;
         }
+
+        if (score == 5) {
+            npc3_Y = 0;
+        }
     }
 
 
     else if(score > 5) {
         
         if (score == 6) {
-            nposY[0] == lastY3;
+            n3posY[0] == 5;
         }
 
         if (count == 0) {
             randomDirection();
-            count = 10;
+            count = 12;
         }
 
-        if (nposX[0] < 3) {
+
+        if (n3posX[0] < 3) {
             if (!upDown) {
-                if (nposY[0] < 16) {
-                    npcDirection = 1;
+                if (n3posY[0] < 16) {
+                    npc3Direction = 1;
                 }
                 else {
-                    npcDirection = -1;
+                    npc3Direction = -1;
                 }
                 upDown = true;
             }
 
             else {
-                npcDirection = 2;
+                npc3Direction = 2;
                 upDown = false;
             }
         }
 
-        else if (nposX[0] > 36) {
+        else if (n3posX[0] > 36) {
             if (!upDown) {
-                if (nposY[0] < 16) {
-                    npcDirection = 1;
+                if (n3posY[0] < 16) {
+                    npc3Direction = 1;
                 }
                 else {
-                    npcDirection = -1;
+                    npc3Direction = -1;
                 }
                 upDown = true;
             }
 
             else {
-                npcDirection = -2;
+                npc3Direction = -2;
                 upDown = false;
             }
         }
 
         
-        if (nposY[0] < 3) {
+        if (n3posY[0] < 3) {
             if (upDown) {
-                if (nposX[0] > 16 ) {
-                npcDirection = -2;
+                if (n3posX[0] > 16 ) {
+                npc3Direction = -2;
                 }
                 else {
-                npcDirection = 2;
+                npc3Direction = 2;
                 }
                 upDown = false;
             }
             else {
-                npcDirection = 1;
+                npc3Direction = 1;
                 upDown = true;
             }
         }
         
-        if (nposY[0] > 36) {
+        if (n3posY[0] > 16) {
             if (upDown) {
-                if (nposX[0] > 16 ) {
-                npcDirection = -2;
+                if (n3posX[0] > 8 ) {
+                npc3Direction = -2;
                 }
                 else {
-                npcDirection = 2;
+                npc3Direction = 2;
                 }
                 upDown = false;
             }
             else {
-                npcDirection = -1;
+                npc3Direction = -1;
                 upDown = true;
             }
         }
 
         for (int n = npc4_length - 1; n > 0; n--) { // previous snake block switched; note head a index 0
-            nposX[n] = nposX[n - 1];
-            nposY[n] = nposY[n - 1];
+            n3posX[n] = n3posX[n - 1];
+            n3posY[n] = n3posY[n - 1];
         }
-        if (npcDirection == 1) {
-            nposY[0]++;
+        if (npc3Direction == 1) {
+            n3posY[0]++;
         }
-        else if (npcDirection == -1) {
-            nposY[0]--;
+        else if (npc3Direction == -1) {
+            n3posY[0]--;
         }
-        else if (npcDirection == 2) {
-            nposX[0]++;
+        else if (npc3Direction == 2) {
+            n3posX[0]++;
         }
-        else if (npcDirection == -2) {
-            nposX[0]--;
+        else if (npc3Direction == -2) {
+            n3posX[0]--;
         }
         for (int n = 0; n < npc4_length; n++) {
             glColor3f(1.0, 0.0, 0.0); 
-            glRectd(nposX[n], nposY[n], nposX[n] + 1, nposY[n] + 1);
+            glRectd(n3posX[n], n3posY[n], n3posX[n] + 1, n3posY[n] + 1);
         }
         glColor3f(0.0, 1.0, 0.0);
 
-        for(int n = 1; n < npc4_length; n++) { // ends game if snake hits npc
-            if(nposX[n] == posX[0] && nposY[n] == posY[0] ) {
-                gameOver =true;
+        for(int n = 0; n < npc4_length; n++) { // ends game if snake hits npc
+            for (int u3 = 0; u3 < 5; u3++){
+                if(n3posX[n] == posX[u3] && n3posY[n] == posY[u3] ) {
+                    gameOver =true;
+                }
             }
         }
 
@@ -473,118 +457,7 @@ void drawNPC3(int npc3_X) {
 
 
 
-// void drawNPC4() {
 
-//     if(score > 5) {
-
-//         if (score == 6) {
-//             nposY[0] == lastY3;
-//         }
-
-//         if (count == 0) {
-//             randomDirection();
-//             count = 10;
-//         }
-
-//         if (nposX[0] < 3) {
-//             if (!upDown) {
-//                 if (nposY[0] < 16) {
-//                     npcDirection = 1;
-//                 }
-//                 else {
-//                     npcDirection = -1;
-//                 }
-//                 upDown = true;
-//             }
-
-//             else {
-//                 npcDirection = 2;
-//                 upDown = false;
-//             }
-//         }
-
-//         else if (nposX[0] > 36) {
-//             if (!upDown) {
-//                 if (nposY[0] < 16) {
-//                     npcDirection = 1;
-//                 }
-//                 else {
-//                     npcDirection = -1;
-//                 }
-//                 upDown = true;
-//             }
-
-//             else {
-//                 npcDirection = -2;
-//                 upDown = false;
-//             }
-//         }
-
-        
-//         if (nposY[0] < 3) {
-//             if (upDown) {
-//                 if (nposX[0] > 16 ) {
-//                 npcDirection = -2;
-//                 }
-//                 else {
-//                 npcDirection = 2;
-//                 }
-//                 upDown = false;
-//             }
-//             else {
-//                 npcDirection = 1;
-//                 upDown = true;
-//             }
-//         }
-        
-//         if (nposY[0] > 36) {
-//             if (upDown) {
-//                 if (nposX[0] > 16 ) {
-//                 npcDirection = -2;
-//                 }
-//                 else {
-//                 npcDirection = 2;
-//                 }
-//                 upDown = false;
-//             }
-//             else {
-//                 npcDirection = -1;
-//                 upDown = true;
-//             }
-//         }
-
-//         for (int n = npc4_length - 1; n > 0; n--) { // previous snake block switched; note head a index 0
-//             nposX[n] = nposX[n - 1];
-//             nposY[n] = nposY[n - 1];
-//         }
-//         if (npcDirection == 1) {
-//             nposY[0]++;
-//         }
-//         else if (npcDirection == -1) {
-//             nposY[0]--;
-//         }
-//         else if (npcDirection == 2) {
-//             nposX[0]++;
-//         }
-//         else if (npcDirection == -2) {
-//             nposX[0]--;
-//         }
-//         for (int n = 0; n < npc4_length; n++) {
-//             glColor3f(1.0, 0.0, 0.0); 
-//             glRectd(nposX[n], nposY[n], nposX[n] + 1, nposY[n] + 1);
-//         }
-//         glColor3f(0.0, 1.0, 0.0);
-
-//         for(int n = 1; n < npc4_length; n++) { // ends game if snake hits npc
-//             if(nposX[n] == posX[0] && nposY[n] == posY[0] ) {
-//                 gameOver =true;
-//             }
-//         }
-
-//         count --;
-//     }
-     
-// }
 void drawSnake() {
     for (int i = snake_length - 1; i > 0; i--) { // previous snake block switched; note head a index 0
         posX[i] = posX[i - 1];
@@ -625,6 +498,11 @@ void drawSnake() {
         else if(posX[i] == 4 && posY[i] == npc3_Y && score < 5 ) {
             gameOver =true;
         }
+
+        else if(posX[i] == 12 && posY[i] == npc3_Y && score > 10 ) {
+            gameOver =true;
+        }
+
     }
     
     if (posX[0] == 0 || posX[0] == gridX - 1 || posY[0] == 0 || posY[0] == gridY - 2) { // check if snake has been in red area
@@ -632,7 +510,7 @@ void drawSnake() {
     }
     if (posX[0] == foodX && posY[0] == foodY) { // if head reaches food
         score++;
-        if (npc4_length < 28 && score > 6) {
+        if (npc4_length < 20 && score > 5) {
             npc4_length += 2;
             npc2_length += 2;
         }
@@ -658,11 +536,13 @@ void drawGameOver() {
 
 void reset() {
     sDirection = 2; // snake direction: 1 = up, -1 = down, 2 = right, -2 = left
-    npcDirection = -1;
+    npc3Direction = -1;
+    npc3Direction = 1;
     score = 0;
     gameOver = 0;
     snake_length = 5;
     npc4_length = 0;
+    npc2_length = 0;
     posX[0] = 20;
     posX[1] = 20;
     posX[2] = 20;
@@ -674,8 +554,18 @@ void reset() {
     posY[3] = 17;
     posY[4] = 16;
 
-    nposY[0] = 3;
-    nposX[0] = 3;
+    n3posY[0] = 3;
+    n3posX[0] = 3;
+    n2posY[0] = 3;
+    n2posX[0] = 3;
+
+    for (int j = 1; j < npc2_length; j++) {
+        n3posX[j] = 0;
+        n3posY[j] = 0;
+        n2posX[j] = 0;
+        n2posY[j] = 0;
+    }
+    npc1_Y = 30;
     food = true;
     right1 = true; // direction for npc1
     right2 = true; // direction for npc2
