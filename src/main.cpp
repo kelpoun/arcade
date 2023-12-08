@@ -7,9 +7,10 @@
 #include <stdlib.h>
 
 // extern global vars
-extern int sDirection;
-extern int score;
+extern bool gameStart;
 extern bool gameOver;
+extern int snakeDirection;
+extern int score;
 
 // forward declarations
 void init();
@@ -42,15 +43,17 @@ void init() {
 void display_callback() {
     glClear(GL_COLOR_BUFFER_BIT); // color buffer will be cleared to value specified by glClearColor
 
-    if (!gameOver) {
+    if (gameStart == 1) {
+        drawGameStart();
+    }
+    else if (!gameOver) {
         // draw functions defined in game.cpp
         drawBoundary();
-        drawSnake();
         drawFood();
         drawNPC(5);
         drawNPC2(25);
         drawNPC3(4);
-    
+        drawSnake();
         drawScore();
     }
     else if (gameOver) {
@@ -76,23 +79,23 @@ void timer_callback(int) {
 void keyboard_callback(int key, int, int) {
     switch(key) {
         case GLUT_KEY_UP:
-            if (sDirection != -1){
-                sDirection = 1;
+            if (snakeDirection != -1){
+                snakeDirection = 1;
             } 
             break;
         case GLUT_KEY_DOWN:
-            if (sDirection != 1){
-                sDirection = -1;
+            if (snakeDirection != 1){
+                snakeDirection = -1;
             } 
             break;
         case GLUT_KEY_RIGHT:
-            if (sDirection != -2){
-                sDirection = 2;
+            if (snakeDirection != -2){
+                snakeDirection = 2;
             } 
             break;
         case GLUT_KEY_LEFT:
-            if (sDirection != 2){
-                sDirection = -2;
+            if (snakeDirection != 2){
+                snakeDirection = -2;
             } 
             break;
     }
@@ -100,12 +103,13 @@ void keyboard_callback(int key, int, int) {
 
 void keyboard_callback2(unsigned char key, int, int) { 
     switch(key) {
-        case 27:
-            if (gameOver) {
-                exit(0);
-            }
+        case 27: // escape
+            exit(0);
             break;
-        case 13: 
+        case 13: // enter
+            if (gameStart) {
+                gameStart = 0;
+            }
             if (gameOver) {
                 reset();
             }
