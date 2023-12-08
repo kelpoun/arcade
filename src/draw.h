@@ -4,6 +4,7 @@
 void initGrid(int, int);
 void drawBoundary();
 void random(int&, int&);
+void randomDirection();
 void drawFood();
 void drawNPC(int);
 void drawNPC2(int);
